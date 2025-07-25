@@ -29,25 +29,30 @@ if (!isset($_SESSION['user'])) {
 
     <main class="container mt-4">
         <h3>Bienvenido, <?= $_SESSION['user']['nombre']; ?></h3>
-        <div class="row">
-            <div class="col-1">
-                <label for="bingoAll">Bingos:</label>
-            </div>
-            <div class="col-10"> <select id="bingoAll" class="form-select">
-                    <option value="">Seleccione un bingo</option>
-                </select>
+          
+       
+           <div class="row mt-4 justify-content-center">
+            <div class="col-md-6 d-none" id="bingostart">
+                    <div class="alert alert-info" >
+                        <h4 class="alert-heading">¡Bingo!</h4>
+                        <p id="resultadoBingo"></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-info" id="resultado">
+                        <h4 class="alert-heading">Numeros jugados</h4>
+                        <p id="resultadoText"></p>
+                    </div>
+                </div>
             </div>
 
-
+        <div id="cartonWrapper">
+            <div id="cartonGenerado" class="mt-4"></div>
         </div>
-
-
-        <button class="btn btn-primary mt-3" id="generarCarton">Obtener Cartón</button>
-    
     </main>
 
     <?php include '../src/script.php'; ?>
-    <script src="../js/index.js"></script>
+    <script src="../js/cartonBingo.js"></script>
 </body>
 
 </html>

@@ -25,7 +25,7 @@ class CartonModel {
             return false; // No hay sorteo activo para ese bingo
         }
      // Obtener datos del bingo
-$stmt = $this->pdo->prepare("SELECT nombre_bingo, valor FROM bingo_juegos WHERE id_bingo = ?");
+$stmt = $this->pdo->prepare("SELECT id_bingo, nombre_bingo, valor,link FROM bingo_juegos WHERE id_bingo = ?");
 $stmt->execute([$bingo_id]);
 $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -50,6 +50,8 @@ $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
                 ],
                 'sorteo_id' => $sorteo['id_sorteo'],
                 'fecha' => $sorteo['fecha_juego'],
+                'link' => $bingo['link'],
+                'idBingo' => $bingo['id_bingo'],
                 'carton_id' => $cartonExistente['id_carton'],
                 'valor' => $bingo['valor']
             ];
@@ -112,6 +114,8 @@ return [
     'fecha' => $sorteo['fecha_juego'],
     'carton_id' => $carton_id,
     'nombre_bingo' => $bingo['nombre_bingo'],
+     'link' => $bingo['link'],
+    'idBingo' => $bingo['id_bingo'],
     'valor' => $bingo['valor']
 ];
 

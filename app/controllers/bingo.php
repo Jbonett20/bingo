@@ -18,12 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Acción: Crear nuevo bingo y sorteo
     $nombre = $data['nombre'] ?? '';
     $valor = $data['valor'] ?? '';
+    $link = $data['link'] ?? '';
     $fecha_juego = $data['fecha_juego'] ?? '';
 
-    if ($model->crearBingoYJuego($nombre, $valor, $fecha_juego)) {
+    if ($model->crearBingoYJuego($nombre, $valor,$link, $fecha_juego)) {
         echo json_encode(['status' => 'success', 'message' => 'Bingo y sorteo creados correctamente']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error al crear bingo/sorteo']);
+        echo json_encode(['status' => 'error', 'message' => 'Error al crear bingo/sorteo puede que ya exista un bingo con el mismo nombre']);
     }
     exit;
 }

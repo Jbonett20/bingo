@@ -34,8 +34,8 @@ public function obtenerJugadoresPorBingo($bingo_id)
     public function marcarPago($bingo_id, $usuario_id) {
         // Si ya existe registro, actualiza. Si no, inserta.
         $sql = "INSERT INTO bingo_jugadores (bingo_id, user_id, estado_pago)
-                VALUES (?, ?, 1)
-                ON DUPLICATE KEY UPDATE estado_pago = 1";
+                VALUES (?, ?, 'Pagado')
+                ON DUPLICATE KEY UPDATE estado_pago = 'Pagado'";
 
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$bingo_id, $usuario_id]);

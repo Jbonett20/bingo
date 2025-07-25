@@ -1,7 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
+ 
     const selectBingo = document.getElementById('selectBingo');
     const tablaJugadores = document.querySelector('#tablaJugadores tbody');
     const form = document.getElementById('form-bingo');
+    const selectBingoJuego = document.getElementById('selectBingoJuego');
+    
+   
 
     // 1. Cargar bingos al select
     fetch('../controllers/bingo.php?action=listar')
@@ -13,7 +17,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 option.textContent = b.nombre_bingo;
                 selectBingo.appendChild(option);
             });
+            data.forEach(b => {
+                const option = document.createElement('option');
+                option.value = b.id_bingo;
+                option.textContent = b.nombre_bingo;
+                selectBingoJuego.appendChild(option);
+            });
         });
+
+     // Habilitar botón cuando se seleccione un bingo
+    selectBingoJuego.addEventListener('change', () => {
+        selectBingoJuego.value;
+         window.location.href = `jugar.php?id_bingo=${selectBingoJuego.value}`;
+    });
+
 
     // 2. Evento al cambiar bingo
     selectBingo.addEventListener('change', function () {
@@ -32,12 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
                          <td>${j.identificacion}</td>
                          <td>${j.telefono}</td>
                         <td>
-                            <span class="badge ${j.pagado == 1 ? 'bg-success' : 'bg-danger'}">
-                                ${j.pagado == 1 ? 'Pagado' : 'Pendiente'}
+                            <span class="badge ${j.pagado == 'Pagado' ? 'bg-success' : 'bg-danger'}">
+                                ${j.pagado == 'Pagado' ? 'Pagado' : 'Pendiente'}
                             </span>
                         </td>
                         <td>
-                            ${j.pagado == 1 ? '' : `<button class="btn btn-sm btn-primary pagar-btn" data-id="${j.id_user}">Pagar</button>`}
+                            ${j.pagado == 'Pagado' ? '✔' : `<button class="btn btn-sm btn-primary pagar-btn" data-id="${j.id_user}">Pagar</button>`}
                         </td>
                     `;
                     tablaJugadores.appendChild(fila);
@@ -74,6 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const payload = {
             nombre: form.nombre.value,
             valor: form.valor.value,
+            link:form.link.value,
             fecha_juego: form.fecha_juego.value
         };
 
@@ -89,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert(response.message);
             if (response.status === 'success') {
                 form.reset();
-                location.reload(); // recargar bingos al select
+                location.reload(); 
             }
         })
         .catch(err => {
@@ -98,3 +116,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+

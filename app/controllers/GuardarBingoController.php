@@ -11,6 +11,7 @@ if (!isset($_SESSION['user'])) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 $user_id = $_SESSION['user']['id'];
+$id_bingo =$data['idBingo'] ?? null;
 $carton_id = $data['carton_id'] ?? null;
 $fecha = $data['sorteo_fecha'] ?? null;
 
@@ -20,7 +21,7 @@ if (!$carton_id || !$fecha) {
 }
 
 $model = new BingoStartModel();
-$result = $model->registrarBingo($user_id, $carton_id, $fecha);
+$result = $model->registrarBingo($user_id,$id_bingo, $carton_id, $fecha);
 
 echo json_encode($result);
 

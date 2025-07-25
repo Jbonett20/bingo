@@ -53,13 +53,17 @@ if (!isset($_SESSION['user'])) {
             <!-- TAB 1: GESTIONAR BINGO -->
             <div class="tab-pane fade show active" id="gestionar" role="tabpanel">
                <form id="form-bingo" method="POST" class="row g-3">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <label class="form-label">Nombre del Bingo</label>
         <input type="text" name="nombre" class="form-control" required>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <label class="form-label">Valor</label>
         <input type="number" step="0.01" name="valor" class="form-control" required>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">link</label>
+        <input type="text" step="0.01" name="link" class="form-control">
     </div>
     <div class="col-md-3">
         <label class="form-label">Fecha de Juego</label>
@@ -70,8 +74,19 @@ if (!isset($_SESSION['user'])) {
     </div>
 </form>
             </div>
+            <!-- Fragmento modificado para el tab JUGAR BINGO -->
+<div class="tab-pane fade" id="jugar" role="tabpanel">
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <label for="selectBingoJuego" class="form-label">Bingo para jugar</label>
+            <select class="form-select" id="selectBingoJuego">
+                <option value="">Seleccione un bingo</option>
+            </select>
+        </div>
+    </div>
+</div>
 
-            <!-- TAB 2: JUGAR BINGO -->
+            <!-- TAB 3: JUGAR BINGO -->
            <div class="tab-pane fade" id="jugadores" role="tabpanel">
     <div class="row mt-3">
         <div class="col-md-4">
