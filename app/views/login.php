@@ -15,6 +15,7 @@
         rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
         crossorigin="anonymous" />
+        <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body>
@@ -26,7 +27,7 @@
   <div class="alert alert-success">Registro exitoso. Ahora puedes iniciar sesión.</div>
 <?php endif; ?>
 
-        <div class="container mt-5">
+        <div class="container mt-5 login">
             <h2>Iniciar Sesión</h2>
             <form id="loginForm">
                 <div class="mb-3">

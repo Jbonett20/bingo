@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+/* === ESTILOS GENERALES === */
+body {
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    padding-bottom: 50px;
+}
+
+main.container {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+/* === ENCABEZADO === */
+h3 {
+    font-weight: 700;
+    color: #1e3c72;
+    margin-bottom: 25px;
+}
+
+/* === SELECT BINGO === */
+#bingoAll {
+    border-radius: 8px;
+    border: 2px solid #2a5298;
+    transition: border-color 0.3s;
+}
+
+#bingoAll:focus {
+    border-color: #1e3c72;
+    box-shadow: 0 0 0 0.2rem rgba(30, 60, 114, 0.25);
+}
+
+/* === BOTÓN GENERAR CARTÓN === */
+#generarCarton {
+    background-color: #2a5298;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+#generarCarton:hover {
+    background-color: #1e3c72;
+    transform: scale(1.03);
+}
+
+/* === ÁREA DE CARTÓN === */
+#cartonWrapper {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+/* === ANIMACIÓN DE ENTRADA === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === LINK ESTILIZADO === */
+a {
+    color: #2a5298;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    main.container {
+        padding: 20px;
+    }
+
+    #generarCarton {
+        width: 100%;
+    }
+}
+

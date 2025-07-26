@@ -1,0 +1,52 @@
+body {
+        background-color: #f9f9f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #343a40;
+    }
+
+    .card {
+        border-radius: 1rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+    .dice {
+        font-size: 3rem;
+        transition: transform 0.2s ease;
+    }
+
+    #lanzarBtn {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+        border-radius: 0.5rem;
+    }
+
+    #resultado, #bingostart {
+        border-radius: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .alert-heading {
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+
+    /* Responsive ajustes */
+    @media (max-width: 768px) {
+        .dice {
+            font-size: 2.5rem;
+        }
+
+        #lanzarBtn {
+            font-size: 1rem;
+        }
+    }

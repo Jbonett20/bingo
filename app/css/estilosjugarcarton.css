@@ -1,0 +1,74 @@
+/* estilosjugarcarton.css */
+
+/* Estilo base para el cartón de bingo */
+#cartonGenerado {
+    display: grid;
+    grid-template-columns: repeat(5, 70px);
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Cada celda del cartón */
+.celda {
+    width: 70px;
+    height: 70px;
+    background-color: white;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 70px;
+    font-weight: bold;
+    font-size: 24px;
+    color: #343a40;
+    transition: transform 0.2s ease;
+}
+
+/* Al pasar el cursor */
+.celda:hover {
+    transform: scale(1.1);
+    background-color: #e9ecef;
+}
+
+/* Celdas marcadas */
+.celda.marcada {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0a58ca;
+    box-shadow: inset 0 0 5px #00000066;
+}
+
+/* Alertas */
+.alert {
+    border-radius: 15px;
+    font-size: 18px;
+}
+
+/* Resultado de números sorteados */
+#resultadoText {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0d6efd;
+    word-break: break-word;
+}
+
+/* Animación opcional para ganar */
+@keyframes resplandor {
+    0% { box-shadow: 0 0 10px #ffc107; }
+    50% { box-shadow: 0 0 20px #ffc107; }
+    100% { box-shadow: 0 0 10px #ffc107; }
+}
+
+#bingostart.alert {
+    animation: resplandor 1.5s infinite;
+}
+
+/* Contenedor general */
+#cartonWrapper {
+    margin-top: 20px;
+    padding-bottom: 30px;
+}

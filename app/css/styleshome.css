@@ -1,0 +1,112 @@
+/* === CONTENEDOR PRINCIPAL === */
+main.container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    margin-top: 30px;
+}
+
+/* === TÍTULO === */
+main h2 {
+    color: #1e3c72;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* === TABS NAV === */
+.nav-tabs .nav-link {
+    color: #2a5298;
+    font-weight: 500;
+    border-radius: 0;
+    border: none;
+    border-bottom: 3px solid transparent;
+    transition: 0.3s;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    border-bottom: 3px solid #2a5298;
+    font-weight: 600;
+    color: #1e3c72;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #1e3c72;
+}
+
+/* === FORMULARIO GESTIÓN DE BINGO === */
+#form-bingo input[type="text"],
+#form-bingo input[type="number"],
+#form-bingo input[type="date"],
+#form-bingo select {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s ease;
+}
+
+#form-bingo input:focus,
+#form-bingo select:focus {
+    border-color: #2a5298;
+    box-shadow: 0 0 0 0.15rem rgba(42, 82, 152, 0.2);
+}
+
+/* === BOTONES === */
+.btn-primary {
+    background-color: #2a5298;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #1e3c72;
+    transform: scale(1.03);
+}
+
+/* === TABLA DE JUGADORES === */
+.table-responsive {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.table thead {
+    background-color: #1e3c72;
+    color: white;
+}
+
+.table tbody tr:hover {
+    background-color: #f2f6fc;
+}
+
+/* === ANIMACIONES === */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === RESPONSIVE MEJORADO === */
+@media (max-width: 768px) {
+    .nav-tabs {
+        flex-direction: column;
+    }
+
+    .nav-tabs .nav-link {
+        margin-bottom: 5px;
+    }
+
+    #form-bingo .form-label {
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+}

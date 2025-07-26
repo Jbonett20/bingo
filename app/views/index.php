@@ -22,6 +22,7 @@ if (!isset($_SESSION['user'])) {
             min-height: 50vh;
         }
     </style>
+    <link rel="stylesheet" href="../css/estilos.css">
 </head>
 
 <body>
