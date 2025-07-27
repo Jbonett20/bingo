@@ -34,7 +34,10 @@ if (!isset($_SESSION['user'])) {
     <main>
         <div class="container mt-5">
             <h2>Bienvenido, <?= $_SESSION['user']['nombre']; ?></h2>
-
+   <div class="text-center my-4">
+            <h5>⏳ El bingo comienza en:</h5>
+            <div id="cuentaRegresiva" class="fs-4 fw-bold text-primary"></div>
+        </div>
                 <audio class="music">
                 </audio>
                   <div class="row mt-4 justify-content-center">
@@ -77,7 +80,7 @@ if (!isset($_SESSION['user'])) {
     </footer>
     <!-- Bootstrap JavaScript Libraries -->
     <?php include '../src/script.php'; ?>
-    <script src="../js/jugarBingo.js"></script>
+    <script type="module" src="../js/jugarBingo.js" ></script>
 </body>
 
 </html>

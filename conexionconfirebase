@@ -1,0 +1,17 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDdvhFfGY3bd5YC67SF92Cc8NEpVLirzZ4",
+  authDomain: "bingoapp-bc32f.firebaseapp.com",
+  projectId: "bingoapp-bc32f",
+  storageBucket: "bingoapp-bc32f.firebasestorage.app",
+  messagingSenderId: "489302159395",
+  appId: "1:489302159395:web:ae5118d1bca34803440196"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);

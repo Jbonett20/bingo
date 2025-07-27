@@ -68,7 +68,7 @@ if (!isset($_SESSION['user'])) {
     </div>
     <div class="col-md-3">
         <label class="form-label">Fecha de Juego</label>
-        <input type="date" name="fecha_juego" class="form-control" required>
+       <input type="datetime-local" name="fecha_juego" class="form-control" required>
     </div>
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Crear Bingo y Sorteo</button>
