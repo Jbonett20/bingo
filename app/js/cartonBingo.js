@@ -1,15 +1,62 @@
+
+import { db, lanzarDados, escucharLanzamiento } from "./firebaseConfig.js"
 document.addEventListener("DOMContentLoaded", () => {
 
+    const diceContainer = document.getElementById("diceContainer");
     const params = new URLSearchParams(window.location.search);
     const idBingo = parseInt(params.get('id_bingo')) || 0;
     mostrarNumeroSorteado(idBingo)
     generarCarton(idBingo);
+    iniciarCuentaRegresiva(idBingo);
     // Luego, actualizar en tiempo real cada 3 segundos
     setInterval(() => {
         mostrarNumeroSorteado(idBingo);
         verificarBingoGanado(idBingo)
-    }, 3000); 
+    }, 3000);
+    escucharLanzamiento((data) => {
+        if (!data) return;
+
+        const { dado1, dado2, dado3,bingoId } = data;
+        
+        let respNum = dado1 + dado2 + dado3;
+
+
+        const diceElements = diceContainer.querySelectorAll(".dice");
+
+        if (diceElements.length >= 3) {
+            diceElements[0].textContent = getEmoji(dado1);
+            diceElements[1].textContent = getEmoji(dado2);
+            diceElements[2].textContent = getEmoji(dado3);
+        }
+        if(idBingo==bingoId){
+      cantarNumeroSorteado(respNum);
+        }
+       
+
+    });
+
 })
+let audioDesbloqueado = false;
+document.getElementById("iniciarJuego").addEventListener("click", (e) => {
+    e.target.classList.add('d-none')
+    let cardPrincipal = document.getElementById('cardPrincipal')
+    let cardResultados = document.getElementById('cardResultados')
+    cardResultados.classList.remove('d-none')
+    
+    cardPrincipal.classList.remove('d-none')
+    const audio = new Audio('../audios/dados.mp3');
+    audio.volume = 0; // sin sonido
+    audio.play().then(() => {
+        audioDesbloqueado = true;
+        document.getElementById("iniciarJuego").style.display = "none";
+    }).catch(err => {
+        console.warn("Fallo al desbloquear el audio:", err);
+    });
+});
+function getEmoji(valor) {
+    const dados = ["", "⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+    return dados[valor] || "❓";
+}
 async function generarCarton(idBingo) {
 
     const res = await fetch("../controllers/GenerarCartonController.php", {
@@ -24,8 +71,8 @@ async function generarCarton(idBingo) {
 
     if (data.success) {
         const contenedor = document.getElementById("cartonGenerado");
-        let direccion = (data.link) ? `<p> <a href=${data.link} a_target>link para entrar a la reunion</a></p>`:''
-        
+        let direccion = (data.link) ? `<p> <a href=${data.link} a_target>link para entrar a la reunion</a></p>` : ''
+
         contenedor.innerHTML = `
       <div class="p-4 rounded" style="background-color: #d0e8f2; border: 1px solid #aaa; max-width: 500px;">
         <h4 class="text-center">BINGO 260</h4>
@@ -41,9 +88,9 @@ async function generarCarton(idBingo) {
           <strong>doscientos sesenta</strong> veces el valor de la apuesta por línea.
         </p>
 
-        <div id="cartonNumeros" class="d-flex gap-2 mt-3 justify-content-center">
+        <div id="cartonNumeros" class="d-flex gap-2 mt-3 justify-content-center ">
           ${data.carton.map(num => `
-            <div class="numero border p-3 rounded text-center" style="width: 60px; cursor: pointer; background-color: #fff;">
+            <div class="numero border p-3 rounded text-center numeroBingo" style="width: 60px; cursor: pointer; background-color: #fff;">
               ${num}
             </div>`).join('')}
         </div>
@@ -75,7 +122,7 @@ async function generarCarton(idBingo) {
                 body: JSON.stringify({
                     carton_id: data.carton_id,
                     sorteo_fecha: data.fecha,
-                    idBingo:idBingo
+                    idBingo: idBingo
                 })
             });
 
@@ -132,7 +179,7 @@ function verificarBingoGanado(idBingo) {
 
                 // Mostrar alerta en la vista
                 const caja = document.getElementById('bingostart')
-                 caja.classList.remove('d-none');
+                caja.classList.remove('d-none');
                 const resultadoText = document.getElementById('resultadoBingo');
                 resultadoText.innerHTML = `<strong>🎉 ¡${nombre} ${apellido} ha ganado el Bingo! 🎉</strong>`;
 
@@ -142,5 +189,50 @@ function verificarBingoGanado(idBingo) {
         })
         .catch(err => {
             console.error('Error al verificar bingo ganado:', err);
+        });
+}
+async function iniciarCuentaRegresiva(idBingo) {
+    const res = await fetch(`../controllers/ObtenerFechaJuegoController.php?id_bingo=${idBingo}`);
+    const data = await res.json();
+
+    if (data.success) {
+        const fechaJuego = new Date(data.fecha_juego); // formato: "YYYY-MM-DD HH:MM:SS"
+        const cuentaElement = document.getElementById("cuentaRegresiva");
+        let info = document.getElementById('info')
+        let buton = document.getElementById('iniciarJuego')
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            const diferencia = fechaJuego - ahora;
+
+            if (diferencia <= 0) {
+                info.classList.add('d-none')
+                buton.classList.remove('d-none')
+                cuentaElement.textContent = "🎯 ¡Para comenzar presione iniciar juego!";
+                clearInterval(intervalo);
+                return;
+            }
+
+            const horas = Math.floor((diferencia / (1000 * 60 * 60)) % 24);
+            const minutos = Math.floor((diferencia / (1000 * 60)) % 60);
+            const segundos = Math.floor((diferencia / 1000) % 60);
+
+            cuentaElement.textContent = `${horas}h ${minutos}m ${segundos}s`;
+        }
+
+        actualizarReloj();
+        const intervalo = setInterval(actualizarReloj, 1000);
+    } else {
+        console.error("No se pudo obtener la fecha del sorteo:", data.message);
+    }
+}
+function cantarNumeroSorteado(numero) {
+    const audio = new Audio(`../audios/${numero}.mp3`);
+    audio.play()
+        .then(() => {
+            console.log(`Audio del número ${numero} reproducido correctamente`);
+        })
+        .catch(error => {
+            console.error(`Error al reproducir el audio del número ${numero}:`, error);
         });
 }

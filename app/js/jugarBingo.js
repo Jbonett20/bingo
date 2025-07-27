@@ -1,8 +1,11 @@
+import { db, lanzarDados, escucharLanzamiento } from "./firebaseConfig.js"
+
 document.addEventListener("DOMContentLoaded", function () {
     const lanzarBtn = document.getElementById('lanzarBtn');
     const diceContainer = document.getElementById('diceContainer');
     const params = new URLSearchParams(window.location.search);
     const idBingo = parseInt(params.get('id_bingo')) || 0;
+    iniciarCuentaRegresiva(idBingo)
     
 // Luego, actualizar en tiempo real cada 3 segundos
     setInterval(() => {
@@ -11,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 3000);
     
   const audioDados = new Audio('../audios/dados.mp3');
-audioDados.loop = true; // Reproduce en bucle mientras giran los dados
+   audioDados.loop = true; // Reproduce en bucle mientras giran los dados
 
 lanzarBtn.addEventListener('click', () => {
     lanzarBtn.disabled = true;
@@ -45,6 +48,7 @@ lanzarBtn.addEventListener('click', () => {
 
         let numerojugado = document.getElementById('resultadoText');
         numerojugado.textContent = `Número sorteado: ${resultado}`;
+        lanzarDados(valores[0] + 1, valores[1] + 1, valores[2] + 1,idBingo);
 
         fetch('../controllers/jugar.php?action=sorteado', {
             method: 'POST',
@@ -125,3 +129,34 @@ function verificarBingoGanado(idBingo) {
 
 
 
+async function iniciarCuentaRegresiva(idBingo) {
+    const res = await fetch(`../controllers/ObtenerFechaJuegoController.php?id_bingo=${idBingo}`);
+    const data = await res.json();
+
+    if (data.success) {
+        const fechaJuego = new Date(data.fecha_juego); // formato: "YYYY-MM-DD HH:MM:SS"
+        const cuentaElement = document.getElementById("cuentaRegresiva");
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            const diferencia = fechaJuego - ahora;
+
+            if (diferencia <= 0) {
+                cuentaElement.textContent = "🎯 ¡El bingo ha comenzado!";
+                clearInterval(intervalo);
+                return;
+            }
+
+            const horas = Math.floor((diferencia / (1000 * 60 * 60)) % 24);
+            const minutos = Math.floor((diferencia / (1000 * 60)) % 60);
+            const segundos = Math.floor((diferencia / 1000) % 60);
+
+            cuentaElement.textContent = `${horas}h ${minutos}m ${segundos}s`;
+        }
+
+        actualizarReloj();
+        const intervalo = setInterval(actualizarReloj, 1000);
+    } else {
+        console.error("No se pudo obtener la fecha del sorteo:", data.message);
+    }
+}

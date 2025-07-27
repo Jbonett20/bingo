@@ -1,74 +1,49 @@
-/* estilosjugarcarton.css */
+body {
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-/* Estilo base para el cartón de bingo */
-#cartonGenerado {
-    display: grid;
-    grid-template-columns: repeat(5, 70px);
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+        h3 {
+            font-weight: 600;
+            color: #343a40;
+        }
 
-/* Cada celda del cartón */
-.celda {
-    width: 70px;
-    height: 70px;
-    background-color: white;
-    border: 2px solid #007bff;
-    border-radius: 10px;
-    text-align: center;
-    line-height: 70px;
-    font-weight: bold;
-    font-size: 24px;
-    color: #343a40;
-    transition: transform 0.2s ease;
-}
+        #cartonWrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 50vh;
+        }
 
-/* Al pasar el cursor */
-.celda:hover {
-    transform: scale(1.1);
-    background-color: #e9ecef;
-}
+        .alert {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 1rem;
+        }
 
-/* Celdas marcadas */
-.celda.marcada {
-    background-color: #0d6efd;
-    color: white;
-    border-color: #0a58ca;
-    box-shadow: inset 0 0 5px #00000066;
-}
+        #cartonGenerado {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            background-color: #fff;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            overflow-x: auto;
+        }
 
-/* Alertas */
-.alert {
-    border-radius: 15px;
-    font-size: 18px;
-}
+        @media (max-width: 768px) {
+            #cartonWrapper {
+                flex-direction: column;
+                padding: 1rem;
+            }
 
-/* Resultado de números sorteados */
-#resultadoText {
-    font-size: 20px;
-    font-weight: bold;
-    color: #0d6efd;
-    word-break: break-word;
-}
-
-/* Animación opcional para ganar */
-@keyframes resplandor {
-    0% { box-shadow: 0 0 10px #ffc107; }
-    50% { box-shadow: 0 0 20px #ffc107; }
-    100% { box-shadow: 0 0 10px #ffc107; }
-}
-
-#bingostart.alert {
-    animation: resplandor 1.5s infinite;
-}
-
-/* Contenedor general */
-#cartonWrapper {
-    margin-top: 20px;
-    padding-bottom: 30px;
+            .alert h4 {
+                font-size: 1.2rem;
+            }
+        }
+        @media (max-width: 576px) {
+    .numeroBingo {
+        font-size: 1.5rem;
+        padding: 1rem;
+        flex: 1 1 40px;
+        min-width: 50px;
+    }
 }

@@ -31,13 +31,18 @@ if (!isset($_SESSION['user'])) {
     <main class="container mt-4">
         <h3>Bienvenido, <?= $_SESSION['user']['nombre']; ?></h3>
         <div class="row">
-            <div class="col-1">
-                <label for="bingoAll">Bingos:</label>
-            </div>
-            <div class="col-10"> <select id="bingoAll" class="form-select">
-                    <option value="">Seleccione un bingo</option>
-                </select>
-            </div>
+           <div class="row mb-3 align-items-center">
+  <div class="col-auto">
+    <label for="bingoAll" class="col-form-label">Bingos:</label>
+  </div>
+  <div class="col">
+    <select id="bingoAll" class="form-select">
+      <option value="">Seleccione un bingo</option>
+      <!-- Opciones se insertan dinámicamente -->
+    </select>
+  </div>
+</div>
+
 
 
         </div>
