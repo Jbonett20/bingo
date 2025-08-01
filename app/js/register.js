@@ -12,9 +12,9 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   const result = await res.json();
 
   if (result.success) {
-    alert('Usuario registrado correctamente.');
+    Swal.fire('Usuario registrado correctamente.');
     window.location.href = 'login.php?registered=1';
   } else {
-    alert('Error: ' + result.message);
+    Swal.fire('Error: ' + result.message);
   }
 });
