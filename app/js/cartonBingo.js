@@ -70,27 +70,31 @@ async function generarCarton(idBingo) {
     const data = await res.json();
 
     if (data.success) {
+        console.log(data)
         const contenedor = document.getElementById("cartonGenerado");
         let direccion = (data.link) ? `<p> <a href=${data.link} a_target>link para entrar a la reunion</a></p>` : ''
 
         contenedor.innerHTML = `
-      <div class="p-4 rounded" style="background-color: #d0e8f2; border: 1px solid #aaa; max-width: 500px;">
-        <h4 class="text-center">BINGO 260</h4>
+      <div class="p-4 rounded" style="background-color: #081013ff; border: 1px solid #aaa; max-width: 500px;">
+        <h4 class="text-center">BINGO</h4>
+        <p>Frejeman.com</p>
         <input type="hidden" id="idBingo" value="${data.idBingo}">
         <p>Sorteo #<strong>${data.sorteo_id}</strong> &nbsp;&nbsp; Cartón #<strong>${data.carton_id}</strong></p>
         <p>Fecha: <strong>${data.fecha}</strong></p>
        <p><em>Apuesta por línea:</em> $${data.valor.toFixed(2)}</p>
+       <p><em>Gana:</em> $${data.partida}</p>
          ${direccion}
        <p>
         <p style="font-size: 14px;">
-          Por cada lanzamiento al aire de tres dados se obtiene un número de puntos, del 3 al 18. De todos los cartones de una línea,
-          el jugador que primero acierte los 5 números de la línea, en cualquier orden, gana
-          <strong>doscientos sesenta</strong> veces el valor de la apuesta por línea.
+        Tres dados virtuales. dieciseis números (3 al 18).
+        el jugador que primero acierte los 5 números de la línea, en cualquier orden, gana
+        <strong>75%</strong> del recaudo total.
+        Reserva hosting: <strong>25%</strong>
         </p>
 
         <div id="cartonNumeros" class="d-flex gap-2 mt-3 justify-content-center ">
           ${data.carton.map(num => `
-            <div class="numero border p-3 rounded text-center numeroBingo" style="width: 60px; cursor: pointer; background-color: #fff;">
+            <div class="numero border p-3 rounded text-center numeroBingo" style="width: 60px; cursor: pointer; background-color: #000;">
               ${num}
             </div>`).join('')}
         </div>

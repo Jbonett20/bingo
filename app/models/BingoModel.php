@@ -51,7 +51,7 @@ class BingoModel {
     }
     public function listarBingos()
 {
-    $sql = "SELECT id_bingo, nombre_bingo FROM bingo_juegos ORDER BY fecha_creacion DESC";
+    $sql = "SELECT id_bingo, nombre_bingo FROM bingo_juegos where status_id= 1 ORDER BY fecha_creacion DESC";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

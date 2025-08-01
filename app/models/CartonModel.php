@@ -1,15 +1,18 @@
 <?php
 require_once '../config/db.php';
 
-class CartonModel {
+class CartonModel
+{
     private $pdo;
 
-    public function __construct() {
+    public function __construct()
+    {
         DB::init();
         $this->pdo = new PDO(DB::$dsn, DB::$user, DB::$password);
     }
 
-    public function generarCarton($usuario_id, $bingo_id) {
+    public function generarCarton($usuario_id, $bingo_id)
+    {
         // Obtener sorteo activo asociado al bingo
         $stmt = $this->pdo->prepare("
             SELECT s.*
@@ -24,10 +27,10 @@ class CartonModel {
         if (!$sorteo) {
             return false; // No hay sorteo activo para ese bingo
         }
-     // Obtener datos del bingo
-$stmt = $this->pdo->prepare("SELECT id_bingo, nombre_bingo, valor,link FROM bingo_juegos WHERE id_bingo = ?");
-$stmt->execute([$bingo_id]);
-$bingo = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Obtener datos del bingo
+        $stmt = $this->pdo->prepare("SELECT id_bingo, nombre_bingo, valor,link FROM bingo_juegos WHERE id_bingo = ?");
+        $stmt->execute([$bingo_id]);
+        $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Verificar si ya tiene un cartón generado
         $stmt = $this->pdo->prepare("
@@ -39,6 +42,8 @@ $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
         $cartonExistente = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($cartonExistente) {
+            $valorbingo = $bingo['valor'];
+            $valorpartida = $this->valorPartidaBingo($bingo['id_bingo'], $valorbingo);
             return [
                 'success' => true,
                 'carton' => [
@@ -53,7 +58,8 @@ $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
                 'link' => $bingo['link'],
                 'idBingo' => $bingo['id_bingo'],
                 'carton_id' => $cartonExistente['id_carton'],
-                'valor' => $bingo['valor']
+                'valor' => $bingo['valor'],
+                'partida' => $valorpartida
             ];
         }
 
@@ -63,7 +69,7 @@ $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
             // Generar 5 números únicos entre 3 y 18
             $nuevo = [];
             while (count($nuevo) < 5) {
-                $num = rand(3, 18);
+                $num = rand(4, 16);
                 if (!in_array($num, $nuevo)) {
                     $nuevo[] = $num;
                 }
@@ -81,8 +87,11 @@ $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
             $diferente = true;
             foreach ($anteriores as $carton) {
                 $nums = array_map('intval', [
-                    $carton['numero1'], $carton['numero2'],
-                    $carton['numero3'], $carton['numero4'], $carton['numero5']
+                    $carton['numero1'],
+                    $carton['numero2'],
+                    $carton['numero3'],
+                    $carton['numero4'],
+                    $carton['numero5']
                 ]);
                 if (count(array_intersect($nuevo, $nums)) === 5) {
                     $diferente = false;
@@ -98,26 +107,46 @@ $bingo = $stmt->fetch(PDO::FETCH_ASSOC);
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
                 ");
                 $stmt->execute([
-                    $usuario_id, $bingo_id, $sorteo['id_sorteo'],
-                    $nuevo[0], $nuevo[1], $nuevo[2], $nuevo[3], $nuevo[4]
+                    $usuario_id,
+                    $bingo_id,
+                    $sorteo['id_sorteo'],
+                    $nuevo[0],
+                    $nuevo[1],
+                    $nuevo[2],
+                    $nuevo[3],
+                    $nuevo[4]
                 ]);
 
                 $carton_id = $this->pdo->lastInsertId();
                 $carton_generado = true;
             }
         }
-   
-return [
-    'success' => true,
-    'carton' => $nuevo,
-    'sorteo_id' => $sorteo['id_sorteo'],
-    'fecha' => $sorteo['fecha_juego'],
-    'carton_id' => $carton_id,
-    'nombre_bingo' => $bingo['nombre_bingo'],
-     'link' => $bingo['link'],
-    'idBingo' => $bingo['id_bingo'],
-    'valor' => $bingo['valor']
-];
+        $valorbingo = $bingo['valor'];
+        $valorpartida = $this->valorPartidaBingo($bingo['id_bingo'], $valorbingo);
+        return [
+            'success' => true,
+            'carton' => $nuevo,
+            'sorteo_id' => $sorteo['id_sorteo'],
+            'fecha' => $sorteo['fecha_juego'],
+            'carton_id' => $carton_id,
+            'nombre_bingo' => $bingo['nombre_bingo'],
+            'link' => $bingo['link'],
+            'idBingo' => $bingo['id_bingo'],
+            'valor' => $bingo['valor'],
+            'partida' => $valorpartida
+        ];
+    }
 
+    public function valorPartidaBingo($id, $valor)
+    {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) as vendidos FROM cartones WHERE bingo_id = ?");
+        $stmt->execute([$id]);
+        $vendidos = $stmt->fetchColumn();
+
+        if ($vendidos > 0) {
+            return ($vendidos * $valor * 0.75);
+        }
+
+        return '';
     }
 }

@@ -15,7 +15,7 @@ class getBingoModel {
                 JOIN bingo_juegos bj ON b.bingo_id = bj.id_bingo
                 JOIN sorteos_bingos sb ON bj.id_bingo = sb.bingo_id
                 JOIN sorteos s ON sb.sorteo_id = sb.sorteo_id
-                WHERE b.user_id = :user_id
+                WHERE b.user_id = :user_id and bj.status_id= 1
                 gROUP BY b.bingo_id, bj.nombre_bingo, sb.sorteo_id
                 ORDER BY s.fecha_juego DESC";
                 
