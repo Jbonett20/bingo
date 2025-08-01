@@ -72,6 +72,11 @@ public function registrarBingo($userId, $id_bingo, $cartonId, $sorteoFecha)
         $stmt->bindParam(':sorteo_fecha', $sorteoFecha);
         $stmt->execute();
 
+        //actualizar elestadp de bingo a 2 para saber que fue jugado
+        $stmt= $this->pdo->prepare("UPDATE bingo_juegos SET status_id=2  WHERE id_bingo=:id_bingo");
+        $stmt->bindParam(':id_bingo', $id_bingo, PDO::PARAM_INT);
+        $stmt->execute();
+
         return ["success" => true];
     } catch (Exception $e) {
         return ["success" => false, "message" => $e->getMessage()];
