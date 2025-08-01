@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     escucharLanzamiento((data) => {
         if (!data) return;
 
-        const { dado1, dado2, dado3,bingoId } = data;
-        
+        const { dado1, dado2, dado3, bingoId } = data;
+
         let respNum = dado1 + dado2 + dado3;
 
 
@@ -28,10 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
             diceElements[1].textContent = getEmoji(dado2);
             diceElements[2].textContent = getEmoji(dado3);
         }
-        if(idBingo==bingoId){
-      cantarNumeroSorteado(respNum);
+        if (idBingo == bingoId) {
+            cantarNumeroSorteado(respNum);
         }
-       
+
 
     });
 
@@ -42,7 +42,7 @@ document.getElementById("iniciarJuego").addEventListener("click", (e) => {
     let cardPrincipal = document.getElementById('cardPrincipal')
     let cardResultados = document.getElementById('cardResultados')
     cardResultados.classList.remove('d-none')
-    
+
     cardPrincipal.classList.remove('d-none')
     const audio = new Audio('../audios/dados.mp3');
     audio.volume = 0; // sin sonido
@@ -93,17 +93,23 @@ async function generarCarton(idBingo) {
         </p>
 
         <div id="cartonNumeros" class="d-flex gap-2 mt-3 justify-content-center ">
-          ${data.carton.map(num => `
-            <div class="numero border p-3 rounded text-center numeroBingo" style="width: 60px; cursor: pointer; background-color: #000;">
-              ${num}
-            </div>`).join('')}
-        </div>
-
-        <div class="text-center mt-3">
+          <div id="cartonNumeros" class="mt-3">
+            <div class="d-flex gap-2 justify-content-center mb-2">
+                ${data.carton.slice(0, 4).map(num => `
+                <div class="numero border p-3 rounded text-center numeroBingo" style="width: 60px; cursor: pointer; background-color: #000;">
+                    ${num}
+                </div>`).join('')}
+            </div>
+            <div class="d-flex gap-2 justify-content-center">
+                ${data.carton.slice(4, 8).map(num => `
+                <div class="numero border p-3 rounded text-center numeroBingo" style="width: 60px; cursor: pointer; background-color: #000;">
+                    ${num}
+                </div>`).join('')}
+            </div>
+             <div class="text-center mt-3">
           <button id="btnBingo" class="btn btn-success" disabled>¡Bingo!</button>
         </div>
-      </div>
-    `;
+        </div>`;
 
         const numeros = document.querySelectorAll(".numero");
         const btnBingo = document.getElementById("btnBingo");
@@ -131,15 +137,27 @@ async function generarCarton(idBingo) {
             });
 
             const resultado = await res.json();
+
             if (resultado.success) {
-                alert("¡Bingo registrado con éxito!");
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Bingo registrado con éxito!',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true
+                });
             } else {
-                alert("Error: " + resultado.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: resultado.message
+                });
             }
         });
-
     } else {
-        alert(data.message);
+        Swal.fire(data.message);
     }
 
 

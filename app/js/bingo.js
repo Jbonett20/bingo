@@ -25,11 +25,14 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-     // Habilitar botón cuando se seleccione un bingo
-    selectBingoJuego.addEventListener('change', () => {
-        selectBingoJuego.value;
-         window.location.href = `jugar.php?id_bingo=${selectBingoJuego.value}`;
-    });
+      // Habilitar botón cuando se seleccione un bingo
+        selectBingoJuego.addEventListener('change', () => {
+            const idBingo = selectBingoJuego.value;
+            if (idBingo !== '') {
+                window.location.href = `jugar.php?id_bingo=${idBingo}`;
+            }
+        });
+
 
 
     // 2. Evento al cambiar bingo
@@ -76,10 +79,11 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(res => res.json())
             .then(r => {
                 if (r.success) {
-                    alert('Pago registrado exitosamente.');
+                    Swal.fire("Pago registrado exitosamente");
                     selectBingo.dispatchEvent(new Event('change')); // Recargar tabla
                 } else {
-                    alert('Error al registrar el pago.');
+                    Swal.fire('Error al registrar el pago.');
+                    
                 }
             });
         }
@@ -104,15 +108,17 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(res => res.json())
         .then(response => {
-            alert(response.message);
-            if (response.status === 'success') {
-                form.reset();
-                location.reload(); 
-            }
+            Swal.fire(response.message).then(() => {
+                if (response.status === 'success') {
+                    form.reset();
+                    location.reload();
+                }
+              });
+
         })
         .catch(err => {
             console.error(err);
-            alert('Error de red o del servidor.');
+            Swal.fire('Error de red o del servidor.');
         });
     });
 });

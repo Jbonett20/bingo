@@ -26,9 +26,9 @@ public function registrarBingo($userId, $id_bingo, $cartonId, $sorteoFecha)
             return ["success" => false, "message" => "Este bingo ya tiene un ganador registrado."];
         }
 
-        // 1. Obtener los números del cartón
+        // 1. Obtener los números del cartón (ahora 8 números)
         $stmt = $this->pdo->prepare("
-            SELECT numero1, numero2, numero3, numero4, numero5, bingo_id 
+            SELECT numero1, numero2, numero3, numero4, numero5, numero6, numero7, numero8, bingo_id 
             FROM cartones 
             WHERE id_carton = :carton_id
         ");
@@ -44,7 +44,10 @@ public function registrarBingo($userId, $id_bingo, $cartonId, $sorteoFecha)
             $carton['numero2'],
             $carton['numero3'],
             $carton['numero4'],
-            $carton['numero5']
+            $carton['numero5'],
+            $carton['numero6'],
+            $carton['numero7'],
+            $carton['numero8']
         ];
 
         // 2. Verificar cuántos de esos números están en los sorteados
@@ -57,7 +60,7 @@ public function registrarBingo($userId, $id_bingo, $cartonId, $sorteoFecha)
         $stmt->execute(array_merge([$carton['bingo_id']], $numerosCarton));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ((int)$result['total'] !== 5) {
+        if ((int)$result['total'] !== 8) {
             return ["success" => false, "message" => "Bingo incorrecto: no todos los números han sido sorteados."];
         }
 
@@ -72,8 +75,8 @@ public function registrarBingo($userId, $id_bingo, $cartonId, $sorteoFecha)
         $stmt->bindParam(':sorteo_fecha', $sorteoFecha);
         $stmt->execute();
 
-        //actualizar elestadp de bingo a 2 para saber que fue jugado
-        $stmt= $this->pdo->prepare("UPDATE bingo_juegos SET status_id=2  WHERE id_bingo=:id_bingo");
+        // 4. Actualizar el estado del bingo a jugado
+        $stmt = $this->pdo->prepare("UPDATE bingo_juegos SET status_id = 2 WHERE id_bingo = :id_bingo");
         $stmt->bindParam(':id_bingo', $id_bingo, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -82,6 +85,7 @@ public function registrarBingo($userId, $id_bingo, $cartonId, $sorteoFecha)
         return ["success" => false, "message" => $e->getMessage()];
     }
 }
+
 
 
 }
