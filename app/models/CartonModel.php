@@ -159,7 +159,7 @@ class CartonModel
         $vendidos = $stmt->fetchColumn();
 
         if ($vendidos > 0) {
-            return ($vendidos * $valor * 0.75);
+            return ($vendidos * $valor * 0.65);
         }
 
         return '';
