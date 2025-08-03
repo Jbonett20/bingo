@@ -1,7 +1,8 @@
 
 import { db, lanzarDados, escucharLanzamiento } from "./firebaseConfig.js"
+let NumerosJugados=[];
 document.addEventListener("DOMContentLoaded", () => {
-
+    
     const diceContainer = document.getElementById("diceContainer");
     const params = new URLSearchParams(window.location.search);
     const idBingo = parseInt(params.get('id_bingo')) || 0;
@@ -88,8 +89,7 @@ async function generarCarton(idBingo) {
         <p style="font-size: 14px;">
         Tres dados virtuales. dieciseis números (3 al 18).
         el jugador que primero acierte los 5 números de la línea, en cualquier orden, gana
-        <strong>75%</strong> del recaudo total.
-        Reserva hosting: <strong>25%</strong>
+        <strong>65%</strong> del recaudo total.
         </p>
 
         <div id="cartonNumeros" class="d-flex gap-2 mt-3 justify-content-center ">
@@ -115,10 +115,15 @@ async function generarCarton(idBingo) {
         const btnBingo = document.getElementById("btnBingo");
 
         numeros.forEach(div => {
+            
             div.addEventListener("click", () => {
-                div.classList.toggle("bg-danger");
-                div.classList.toggle("text-white");
 
+              let numeroclick= parseInt(div.textContent);
+              let numBool =  NumerosJugados.includes(numeroclick)
+              if(numBool){
+                div.classList.toggle("bg-danger");
+                }
+                div.classList.toggle("text-white");
                 const todosSeleccionados = [...numeros].every(n => n.classList.contains("bg-danger"));
                 btnBingo.disabled = !todosSeleccionados;
             });
@@ -178,6 +183,7 @@ function mostrarNumeroSorteado(idBingo) {
                     resultadoText.appendChild(p);
                 });
             } else if (data) {
+               NumerosJugados=data.carton
                 const p = document.createElement('p');
                 p.textContent = `Número sorteado: ${data.carton || data}`;
                 resultadoText.appendChild(p);

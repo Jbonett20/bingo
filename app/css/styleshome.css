@@ -98,6 +98,27 @@ a:hover {
     text-decoration: underline;
     color: #ffca2c;
 }
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-color: #ffca2c !important;
+    border: none;
+    color: #000 !important;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+/* Cuando están activos (página actual) */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #ffc107 !important; /* un poco más oscuro */
+    font-weight: bold;
+    color: #000 !important;
+}
+
+/* Hover */
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #e0a800 !important;
+    color: #fff !important;
+}
 
 /* Footer */
 footer {
