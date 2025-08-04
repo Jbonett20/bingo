@@ -1,6 +1,5 @@
 
 import { db, lanzarDados, escucharLanzamiento } from "./firebaseConfig.js"
-let NumerosJugados=[];
 document.addEventListener("DOMContentLoaded", () => {
     
     const diceContainer = document.getElementById("diceContainer");
@@ -71,7 +70,6 @@ async function generarCarton(idBingo) {
     const data = await res.json();
 
     if (data.success) {
-        console.log(data)
         const contenedor = document.getElementById("cartonGenerado");
         let direccion = (data.link) ? `<p> <a href=${data.link} a_target>link para entrar a la reunion</a></p>` : ''
 
@@ -116,17 +114,19 @@ async function generarCarton(idBingo) {
 
         numeros.forEach(div => {
             
-            div.addEventListener("click", () => {
+            div.addEventListener("click", async () => {
+                let numeroclick = parseInt(div.textContent);
+                let numBool = await verificarNumeroJugado(idBingo, numeroclick);
 
-              let numeroclick= parseInt(div.textContent);
-              let numBool =  NumerosJugados.includes(numeroclick)
-              if(numBool){
-                div.classList.toggle("bg-danger");
+                if (numBool) {
+                    div.classList.toggle("bg-danger");
                 }
                 div.classList.toggle("text-white");
+
                 const todosSeleccionados = [...numeros].every(n => n.classList.contains("bg-danger"));
                 btnBingo.disabled = !todosSeleccionados;
             });
+
         });
         btnBingo.addEventListener("click", async () => {
             const res = await fetch("../controllers/GuardarBingoController.php", {
@@ -183,7 +183,6 @@ function mostrarNumeroSorteado(idBingo) {
                     resultadoText.appendChild(p);
                 });
             } else if (data) {
-               NumerosJugados=data.carton
                 const p = document.createElement('p');
                 p.textContent = `Número sorteado: ${data.carton || data}`;
                 resultadoText.appendChild(p);
@@ -263,4 +262,14 @@ function cantarNumeroSorteado(numero) {
         .catch(error => {
             console.error(`Error al reproducir el audio del número ${numero}:`, error);
         });
+}
+async function verificarNumeroJugado(idBingo, numero) {
+    try {
+        const response = await fetch(`../controllers/jugar.php?action=NumeroJugado&id_bingo=${idBingo}&numero=${numero}`);
+        const data = await response.json();
+        return data.success === true;
+    } catch (err) {
+        console.error('Error al verificar bingo ganado:', err);
+        return false;
+    }
 }

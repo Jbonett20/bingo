@@ -44,3 +44,18 @@ if ($action === 'Bingoganado') {
         echo json_encode(['success' => false, 'ganador' => []]);
     }
 }
+
+if ($action === 'NumeroJugado') {
+   $bingo_id = $_GET['id_bingo'] ?? 0;
+    $numero = $_GET['numero'] ?? 0;
+
+
+    $model = new BingoModel();
+    $numeroJugado= $model->getNumeroJugado($bingo_id,$numero);
+    
+    if ($numeroJugado) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false]);
+    }
+}

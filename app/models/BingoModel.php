@@ -112,5 +112,15 @@ public function getBingoGnado($bingo_id) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result ?: false;
 }
-
+public function getNumeroJugado($bingo_id,$numero) {
+    $stmt = $this->pdo->prepare("SELECT numero_sorteado
+        FROM bingo_numeros_sorteados
+        WHERE id_bingo = :bingo_id
+          AND numero_sorteado = :numero
+        LIMIT 1
+    ");
+    $stmt->execute(['bingo_id' => $bingo_id,'numero'=>$numero]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ?: false;
+}
 }
