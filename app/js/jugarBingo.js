@@ -1,11 +1,18 @@
 import { db, lanzarDados, escucharLanzamiento } from "./firebaseConfig.js"
 
+
+let auto = false; // Variable para controlar el modo automático
 document.addEventListener("DOMContentLoaded", function () {
     const lanzarBtn = document.getElementById('lanzarBtn');
     const diceContainer = document.getElementById('diceContainer');
     const params = new URLSearchParams(window.location.search);
     const idBingo = parseInt(params.get('id_bingo')) || 0;
     iniciarCuentaRegresiva(idBingo)
+    if(auto){
+        setInterval(() => {             
+        autoLanzarDados(); 
+     } ,3000)
+    }
     
 // Luego, actualizar en tiempo real cada 3 segundos
     setInterval(() => {
@@ -17,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
    audioDados.loop = true; // Reproduce en bucle mientras giran los dados
 
 lanzarBtn.addEventListener('click', () => {
-    lanzarBtn.disabled = true;
+   lanzarBtn.disabled = true;
     const dice = diceContainer.querySelectorAll('.dice');
     const dadoEmojis = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
@@ -31,7 +38,7 @@ lanzarBtn.addEventListener('click', () => {
     let interval = setInterval(() => {
        dice.forEach(d => {
     d.textContent = Math.floor(Math.random() * 6) + 1;
-});
+    });
 
     }, 80);
 
@@ -58,6 +65,9 @@ lanzarBtn.addEventListener('click', () => {
 
         lanzarBtn.disabled = false;
     }, 2000);
+   setInterval(function() {
+    lanzarBtn.click();
+}, 3500);
 });
 
 });
@@ -159,4 +169,47 @@ async function iniciarCuentaRegresiva(idBingo) {
     } else {
         console.error("No se pudo obtener la fecha del sorteo:", data.message);
     }
+}
+function autoLanzarDados(){
+     lanzarBtn.disabled = true;
+    const dice = diceContainer.querySelectorAll('.dice');
+    const dadoEmojis = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+    // Reproducir audio de dados
+    audioDados.currentTime = 0;
+    audioDados.play().catch(err => {
+        console.warn('No se pudo reproducir dados.mp3:', err);
+    });
+
+    // Mostrar 🎲 mientras giran
+    let interval = setInterval(() => {
+       dice.forEach(d => {
+    d.textContent = Math.floor(Math.random() * 6) + 1;
+    });
+
+    }, 80);
+
+    setTimeout(() => {
+        clearInterval(interval);
+        audioDados.pause();
+        audioDados.currentTime = 0;
+
+        const valores = [1, 2, 3].map(() => Math.floor(Math.random() * 6));
+        dice.forEach((d, i) => d.textContent = dadoEmojis[valores[i]]);
+
+        const resultado = valores.reduce((a, b) => a + b + 1, 0); 
+        cantarNumeroSorteado(resultado);
+
+        let numerojugado = document.getElementById('resultadoText');
+        numerojugado.textContent = `Número sorteado: ${resultado}`;
+        lanzarDados(valores[0] + 1, valores[1] + 1, valores[2] + 1,idBingo);
+
+        fetch('../controllers/jugar.php?action=sorteado', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `bingo_id=${idBingo}&numero=${resultado}`
+        });
+
+        lanzarBtn.disabled = false;
+    }, 2000);
 }
