@@ -8,12 +8,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDdvhFfGY3bd5YC67SF92Cc8NEpVLirzZ4",
-  authDomain: "bingoapp-bc32f.firebaseapp.com",
-  projectId: "bingoapp-bc32f",
-  storageBucket: "bingoapp-bc32f.firebasestorage.app",
-  messagingSenderId: "489302159395",
-  appId: "1:489302159395:web:ae5118d1bca34803440196"
+  apiKey: "AIzaSyCoG-Gr0Ai0qoqABNuxiCLLsgl8nmWHiAg",
+  authDomain: "appbingo-1c36b.firebaseapp.com",
+  projectId: "appbingo-1c36b",
+  storageBucket: "appbingo-1c36b.firebasestorage.app",
+  messagingSenderId: "722084299800",
+  appId: "1:722084299800:web:67f5fc86602bf7370b6f6d"
 };
 
 const app = initializeApp(firebaseConfig);

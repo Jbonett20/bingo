@@ -7,6 +7,7 @@ import { initializeApp } from "firebase/app";
 const firebaseConfig = {
   apiKey: "AIzaSyDdvhFfGY3bd5YC67SF92Cc8NEpVLirzZ4",
   authDomain: "bingoapp-bc32f.firebaseapp.com",
+  databaseURL: "https://bingoapp-bc32f-default-rtdb.firebaseio.com",
   projectId: "bingoapp-bc32f",
   storageBucket: "bingoapp-bc32f.firebasestorage.app",
   messagingSenderId: "489302159395",
